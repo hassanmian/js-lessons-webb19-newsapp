@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import 'bootstrap/dist/css/bootstrap.css'
 import './App.css';
+import NewsList from './components/NewsList';
 
 function App() {
+  const [newsList, setNewsList] = useState(null)
+
+  function fetchNewsList() {
+    fetch("https://mock-data-api.firebaseio.com/news/articles.json")
+    .then(res => res.json())
+    .then(data => {
+      setNewsList(data)
+    })
+  }
+
+  useEffect( () => {
+    fetchNewsList()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {newsList && <NewsList newsList={newsList} /> }
     </div>
   );
 }
